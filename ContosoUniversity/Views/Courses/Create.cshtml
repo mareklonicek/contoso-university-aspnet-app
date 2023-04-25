@@ -1,0 +1,74 @@
+﻿@model ContosoUniversity.Models.SchoolViewModels.Instructor_Enrollments_Student
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Course</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Course.CourseID" class="control-label"></label>
+                <input asp-for="@Model.Course.CourseID" class="form-control" />
+                <span asp-validation-for="@Model.Course.CourseID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Course.Title" class="control-label"></label>
+                <input asp-for="@Model.Course.Title" class="form-control" />
+                <span asp-validation-for="@Model.Course.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Course.Credits" class="control-label"></label>
+                <input asp-for="@Model.Course.Credits" class="form-control" />
+                <span asp-validation-for="@Model.Course.Credits" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Student</label>
+                <select class="form-control" asp-items="@(new SelectList(Model.Students,"ID","LastName",2))">
+                    <option value="">-- Select Student --</option>
+                </select>   
+            </div>
+             <div class="form-group">
+                <label class="control-label">Instructor</label>
+                <select class="form-control" asp-items="@(new SelectList(Model.Instructors,"ID","LastName",2))">
+                    <option value=""></option>
+                </select>
+               
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Course.Department" class="control-label"></label>
+                <select asp-for="@Model.Course.DepartmentID" class="form-control" asp-items="@(new SelectList(@Model.Departments,"DepartmentID","Name",2))">
+                    @*<option value="">-- Select Department --</option>*@
+                </select>
+                <br />
+                @foreach (var PM in Model.Courses)
+                {
+                    <label><span class="glyphicon glyphicon-leaf"></span>
+                    @Html.RadioButtonFor(m => m.Course, PM.CourseID)<span> </span> @PM.Title 
+                    </label><br />
+                }
+              </div>
+            <div><label>Select Course(s)</label>
+                @Html.ListBoxFor(m=> m.SelectedCourses,new SelectList(Model.Courses,"CourseID","Title"))
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
